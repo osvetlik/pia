@@ -1,54 +1,47 @@
 package info.svetlik.pia.service;
 
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import info.svetlik.pia.dao.UserRepository;
 import info.svetlik.pia.domain.User;
 
 @Service
-public class UserManagerImpl implements UserManager, UserDetailsService {
-
-	private final Map<String, User> users = new HashMap<>();
+public class UserManagerImpl implements UserManager {
 
 	private final PasswordEncoder encoder;
 
+	private final UserRepository repo;
+
 	@Autowired
-	public UserManagerImpl(PasswordEncoder encoder) {
+	public UserManagerImpl(PasswordEncoder encoder, UserRepository repo) {
 		this.encoder = encoder;
+		this.repo = repo;
 	}
 
 	@Override
 	public List<User> getUsers() {
-		return Collections.unmodifiableList(new LinkedList<>(users.values()));
-	}
-
-	@Override
-	public UserDetails loadUserByUsername(String username) {
-		if (!this.users.containsKey(username)) {
-			throw new UsernameNotFoundException("User does not exist!");
+		List<User> retVal = new LinkedList<>();
+		for (User user : this.repo.findAll()) {
+			retVal.add(user);
 		}
-		return this.users.get(username);
+		return Collections.unmodifiableList(retVal);
 	}
 
 	@Override
 	public void addUser(String username, String password) {
-		if (this.users.containsKey(username)) {
+		if (this.repo.findByUsername(username) != null) {
 			throw new IllegalArgumentException("User already exists!");
 		}
 
 		String hashed = this.encoder.encode(password);
 		User user = new User(username, hashed);
-		this.users.put(username, user);
+		this.repo.save(user);
 	}
 
 }

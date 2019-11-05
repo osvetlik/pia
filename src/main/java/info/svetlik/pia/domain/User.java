@@ -1,57 +1,54 @@
 package info.svetlik.pia.domain;
 
-import java.util.Collection;
-import java.util.Collections;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
+@Entity
+public class User {
 
-public class User implements UserDetails {
+	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	private Long id;
 
-	private static final long serialVersionUID = 8808410895223119011L;
-
+	@Column(unique = true)
 	private String username;
 
 	private String password;
 
+	public User() {
+		// Nothing here
+	}
+
 	public User(String username, String password) {
-		this.username = username;
-		this.password = password;
+		this.setUsername(username);
+		this.setPassword(password);
 	}
 
-	@Override
-	public Collection<? extends GrantedAuthority> getAuthorities() {
-		return Collections.emptyList();
+	public Long getId() {
+		return id;
 	}
 
-	@Override
-	public String getPassword() {
-		return this.password;
+	public void setId(Long id) {
+		this.id = id;
 	}
 
-	@Override
 	public String getUsername() {
-		return this.username;
+		return username;
 	}
 
-	@Override
-	public boolean isAccountNonExpired() {
-		return true;
+	public void setUsername(String username) {
+		this.username = username;
 	}
 
-	@Override
-	public boolean isAccountNonLocked() {
-		return true;
+	public String getPassword() {
+		return password;
 	}
 
-	@Override
-	public boolean isCredentialsNonExpired() {
-		return true;
-	}
-
-	@Override
-	public boolean isEnabled() {
-		return true;
+	public void setPassword(String password) {
+		this.password = password;
 	}
 
 }
