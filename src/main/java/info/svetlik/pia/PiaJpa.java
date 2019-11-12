@@ -5,9 +5,13 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Import;
 
 import info.svetlik.pia.configuration.AppConfig;
+import info.svetlik.pia.configuration.DbConfig;
 
 @SpringBootApplication
-@Import(AppConfig.class)
+@Import({
+	AppConfig.class,
+	DbConfig.class
+})
 public class PiaJpa {
 
 	public static void main(String[] args) {
