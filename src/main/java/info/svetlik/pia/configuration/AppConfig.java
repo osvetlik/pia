@@ -5,6 +5,7 @@ import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -12,8 +13,11 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.util.matcher.RegexRequestMatcher;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import org.thymeleaf.extras.springsecurity5.dialect.SpringSecurityDialect;
 import org.thymeleaf.spring5.SpringTemplateEngine;
 import org.thymeleaf.spring5.templateresolver.SpringResourceTemplateResolver;
 import org.thymeleaf.spring5.view.ThymeleafViewResolver;
@@ -51,6 +55,7 @@ public class AppConfig extends WebSecurityConfigurerAdapter implements WebMvcCon
         SpringTemplateEngine templateEngine = new SpringTemplateEngine();
         templateEngine.setTemplateResolver(templateResolver());
         templateEngine.setEnableSpringELCompiler(true);
+        templateEngine.addDialect("sec", new SpringSecurityDialect());
         return templateEngine;
     }
 
@@ -68,12 +73,39 @@ public class AppConfig extends WebSecurityConfigurerAdapter implements WebMvcCon
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
-		http.authorizeRequests().mvcMatchers("/").permitAll();
+		http
+		.authorizeRequests()
+			.mvcMatchers("/login").permitAll()
+			.regexMatchers(HttpMethod.GET, "^/css/.*", "^/webfonts/.*").permitAll()
+			.anyRequest().authenticated()
+			.and()
+		.formLogin()
+			.loginPage("/login")
+			.permitAll()
+			.defaultSuccessUrl("/")
+			.and()
+		.logout()
+			.logoutRequestMatcher(new RegexRequestMatcher("/logout", "GET"))
+			.invalidateHttpSession(true)
+			.deleteCookies("JSESSIONID")
+			.permitAll();
 	}
 
 	@Override
 	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-		auth.userDetailsService(this.userDetailsService).passwordEncoder(passwordEncoder());
+		auth
+		.userDetailsService(this.userDetailsService)
+		.passwordEncoder(passwordEncoder());
+	}
+
+	@Override
+	public void addResourceHandlers(ResourceHandlerRegistry registry) {
+		registry
+		.addResourceHandler("/css/**")
+		.addResourceLocations("/css/");
+		registry
+		.addResourceHandler("/webfonts/**")
+		.addResourceLocations("/webfonts/");
 	}
 
 }

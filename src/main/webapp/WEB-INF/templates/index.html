@@ -1,10 +1,18 @@
 <!DOCTYPE html>
 
-<html xmlns:th="http://www.thymeleaf.org" lang="cs">
-	<head>
-		<title>PIA ukázka</title>
+<html
+	xmlns:th="http://www.thymeleaf.org"
+	lang="cs"
+>
+	<head th:replace="fragments/headers :: head(~{::title})">
+		<title>Title</title>
 	</head>
 	<body>
-		<h1>PIA!</h1>
+		<nav th:replace="fragments/headers :: nav"></nav>
+		<div sec:authorize="hasRole('USER')">Text visible to user.</div>
+        <div sec:authorize="hasRole('ADMIN')">Text visible to admin.</div>
+        <div sec:authorize="isAuthenticated()">
+            Text visible only to authenticated users.
+        </div>
 	</body>
 </html>

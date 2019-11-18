@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+
+<html
+	xmlns:th="http://www.thymeleaf.org"
+	lang="cs"
+>
+	<head th:fragment="head(title)">
+		<title th:replace="${title}">PIA ukázka</title>
+		<link rel="stylesheet" type="text/css" media="all" th:href="@{/css/style.css}">
+		<link rel="stylesheet" type="text/css" media="all" th:href="@{/css/all.min.css}">
+	</head>
+	<body>
+		<nav th:fragment="nav">
+			<ul>
+				<li><h1>PIA!</h1></li>
+			</ul>
+			<ul>
+				<li>
+					<a th:href="@{/password}"><i class="fa fa-users-cog"></i></a>
+        		</li>
+				<li>
+					<a th:href="@{/logout}"><i class="fa fa-power-off"></i></a>
+        		</li>
+			</ul>
+		</nav>
+		
+		<p>Hello <span th:text="${#authentication.name}"></span></p>
+	</body>
+</html>
