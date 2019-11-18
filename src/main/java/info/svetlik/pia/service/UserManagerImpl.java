@@ -78,6 +78,10 @@ public class UserManagerImpl implements UserManager, UserDetailsService {
 		}
 	}
 
+	private String toSpringRole(Role role) {
+		return "ROLE_" + role.getCode();
+	}
+
 	@Override
 	@Transactional
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -90,7 +94,8 @@ public class UserManagerImpl implements UserManager, UserDetailsService {
 
 		user.getRoles()
 		.stream()
-		.forEach(r -> creds.addRole("ROLE_" + r.getCode()));
+		.map(this::toSpringRole)
+		.forEach(creds::addRole);
 
 		return creds;
 	}
