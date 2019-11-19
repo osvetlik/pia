@@ -8,6 +8,7 @@ class PiaApplicationTests {
 
 	@Test
 	void contextLoads() {
+		// Nothing here, just testing start
 	}
 
 }
