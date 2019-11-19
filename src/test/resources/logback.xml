@@ -6,11 +6,11 @@
         </encoder>
     </appender>
 
-    <logger name="root" level="info">
+    <logger name="root" level="error">
         <appender-ref ref="CONSOLE"/>
     </logger>
     
-    <logger name="info.svetlik.pia" level="debug">
+    <logger name="info.svetlik.pia" level="debug" additivity="false">
     	<appender-ref ref="CONSOLE" />
     </logger>
 </configuration>
