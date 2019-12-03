@@ -23,3 +23,24 @@
 * **Buffer overflow** - Buffer overflow is an anomaly that occurs when software writing data to a defined space in memory known as a buffer. Overflowing the buffer’s capacity results in adjacent memory locations being overwritten with data. This behavior can be exploited to inject malicious code into memory, potentially creating a vulnerability in the targeted machine.
 * **Cross-site request forgery (CSRF)** - Cross site request forgery involves tricking a victim into making a request that utilizes their authentication or authorization. By leveraging the account privileges of a user, an attacker is able to send a request masquerading as the user. Once a user’s account has been compromised, the attacker can exfiltrate, destroy or modify important information. Highly privileged accounts such as administrators or executives are commonly targeted.
 * **Data breach** - Different than specific attack vectors, a data breach is a general term referring to the release of sensitive or confidential information, and can occur through malicious actions or by mistake. The scope of what is considered a data breach is fairly wide, and may consist of a few highly valuable records all the way up to millions of exposed user accounts.
+
+
+## Docker
+
+* [Dockerizace Java aplikací](https://runnable.com/docker/java/dockerize-your-java-application)
+* [Repository pro Docker](https://hub.docker.com/)
+* [Příklad image pro Javu](https://hub.docker.com/_/adoptopenjdk)
+
+Vzorový Dockerfile
+
+	FROM adoptopenjdk:11-jre-hotspot
+	RUN mkdir /opt/app
+	COPY japp.jar /opt/app
+	CMD ["java", "-jar", "/opt/app/japp.jar"]
+
+### Docker compose, Kubernetes, OpenShift
+
+Orchestrace (organizace) kontejnerů.
+
+* [yaml basics + kubernetes](https://www.mirantis.com/blog/introduction-to-yaml-creating-a-kubernetes-deployment/)
+* [Docker-compose](https://docs.docker.com/compose/compose-file/)
