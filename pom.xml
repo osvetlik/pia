@@ -12,6 +12,7 @@
 	<groupId>info.svetlik.pia</groupId>
 	<artifactId>pia</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
+	<packaging>war</packaging>
 	<name>pia</name>
 	<description>Sample project for PIA labs</description>
 
