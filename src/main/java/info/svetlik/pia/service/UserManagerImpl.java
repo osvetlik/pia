@@ -30,17 +30,14 @@ public class UserManagerImpl implements UserManager, UserDetailsService {
 	private static final String DEFAULT_USER = "admin";
 	private static final String DEFAULT_PASSWORD = "default";
 
-	private final PasswordEncoder encoder;
-
-	private final UserRepository userRepo;
-	private final RoleRepository roleRepo;
+	@Autowired
+	private PasswordEncoder encoder;
 
 	@Autowired
-	public UserManagerImpl(PasswordEncoder encoder, UserRepository userRepo, RoleRepository roleRepo) {
-		this.encoder = encoder;
-		this.userRepo = userRepo;
-		this.roleRepo = roleRepo;
-	}
+	private UserRepository userRepo;
+
+	@Autowired
+	private RoleRepository roleRepo;
 
 	@Override
 	public List<User> getUsers() {
